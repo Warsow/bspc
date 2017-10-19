@@ -122,20 +122,20 @@ void DefaultCfg(void)
 	//bbox 0
 	cfg.bboxes[0].presencetype = PRESENCE_NORMAL;
 	cfg.bboxes[0].flags = 0;
-	cfg.bboxes[0].mins[0] = -15;
-	cfg.bboxes[0].mins[1] = -15;
+	cfg.bboxes[0].mins[0] = -16;
+	cfg.bboxes[0].mins[1] = -16;
 	cfg.bboxes[0].mins[2] = -24;
-	cfg.bboxes[0].maxs[0] = 15;
-	cfg.bboxes[0].maxs[1] = 15;
-	cfg.bboxes[0].maxs[2] = 32;
+	cfg.bboxes[0].maxs[0] = 16;
+	cfg.bboxes[0].maxs[1] = 16;
+	cfg.bboxes[0].maxs[2] = 40;
 	//bbox 1
 	cfg.bboxes[1].presencetype = PRESENCE_CROUCH;
 	cfg.bboxes[1].flags = 1;
-	cfg.bboxes[1].mins[0] = -15;
-	cfg.bboxes[1].mins[1] = -15;
+	cfg.bboxes[1].mins[0] = -16;
+	cfg.bboxes[1].mins[1] = -16;
 	cfg.bboxes[1].mins[2] = -24;
-	cfg.bboxes[1].maxs[0] = 15;
-	cfg.bboxes[1].maxs[1] = 15;
+	cfg.bboxes[1].maxs[0] = 16;
+	cfg.bboxes[1].maxs[1] = 16;
 	cfg.bboxes[1].maxs[2] = 16;
 	//
 	cfg.allpresencetypes = PRESENCE_NORMAL|PRESENCE_CROUCH;
