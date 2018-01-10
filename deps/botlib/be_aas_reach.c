@@ -2126,7 +2126,7 @@ int AAS_Reachability_Jump(int area1num, int area2num)
 	//
 	phys_jumpvel = aassettings.phys_jumpvel;
 	//maximum distance a player can jump
-	maxjumpdistance = 2 * AAS_MaxJumpDistance(phys_jumpvel);
+	maxjumpdistance = 5 * AAS_MaxJumpDistance(phys_jumpvel);
 	//maximum height a player can jump with the given initial z velocity
 	maxjumpheight = AAS_MaxJumpHeight(phys_jumpvel);
 
@@ -2200,10 +2200,29 @@ int AAS_Reachability_Jump(int area1num, int area2num)
 		{
 			//get the horizontal speed for the jump, if it isn't possible to calculate this
 			//speed (the jump is not possible) then there's no jump reachability created
-			if (!AAS_HorizontalVelocityForJump(phys_jumpvel, beststart, bestend, &speed))
-				return qfalse;
+			if (!AAS_HorizontalVelocityForJump(phys_jumpvel, beststart, bestend, &speed)) {
+				// Wsw: hack for actually producing strafejump reachabilities.
+				// The jump reachability assumes that a bot initiallly
+				// walks on phys_maxveliocity ups on ground.
+				// We could just increase that value to make larger gaps feasible targets.
+				// The problem is, strafejumping requires some initial speedup,
+				// and TRAVEL_JUMP/TRAVEL_STRAFEJUMP reachabilities
+				// can be followed by a standing still bot.
+				// To avoid weird looking cheating jumps,
+				// limit the hacked initial velocity to something around dash speed.
+				float old_maxvelocity = aassettings.phys_maxvelocity;
+				aassettings.phys_maxvelocity = 470;
+				if (!AAS_HorizontalVelocityForJump(phys_jumpvel, beststart, bestend, &speed)) {
+					aassettings.phys_maxvelocity = old_maxvelocity;
+					return qfalse;
+				} else {
+					aassettings.phys_maxvelocity = old_maxvelocity;
+					traveltype = TRAVEL_STRAFEJUMP;
+				}
+			} else {
+				traveltype = TRAVEL_JUMP;
+			}
 			speed *= 1.05f;
-			traveltype = TRAVEL_JUMP;
 			//
 			//NOTE: test if the horizontal distance isn't too small
 			VectorSubtract(bestend, beststart, dir);
@@ -2262,7 +2281,7 @@ int AAS_Reachability_Jump(int area1num, int area2num)
 		//
 		// get command movement
 		VectorClear(cmdmove);
-		if ((traveltype & TRAVELTYPE_MASK) == TRAVEL_JUMP)
+		if ((traveltype & TRAVELTYPE_MASK) == TRAVEL_JUMP || (traveltype & TRAVELTYPE_MASK) == TRAVEL_STRAFEJUMP)
 			cmdmove[2] = aassettings.phys_jumpvel;
 		else
 			cmdmove[2] = 0;
@@ -2278,6 +2297,7 @@ int AAS_Reachability_Jump(int area1num, int area2num)
 		//
 		for (i = 0; i < 3; i++)
 		{
+			float old_maxvelocity;
 			//
 			if (i == 1)
 				VectorAdd(testend, sidewards, testend);
@@ -2290,9 +2310,16 @@ int AAS_Reachability_Jump(int area1num, int area2num)
 			VectorNormalize(dir);
 			VectorScale(dir, speed, velocity);
 			//
+			old_maxvelocity = aassettings.phys_maxvelocity;
+			if ((traveltype & TRAVELTYPE_MASK) == TRAVEL_STRAFEJUMP) {
+				aassettings.phys_maxvelocity = 470;
+			}
 			AAS_PredictClientMovement(&move, -1, beststart, PRESENCE_NORMAL, qtrue,
 										velocity, cmdmove, 3, 30, 0.1f,
 										stopevent, 0, qfalse);
+
+			aassettings.phys_maxvelocity = old_maxvelocity;
+
 			// if prediction time wasn't enough to fully predict the movement
 			if (move.frames >= 30)
 				return qfalse;
@@ -2304,7 +2331,7 @@ int AAS_Reachability_Jump(int area1num, int area2num)
 				return qfalse;
 			//the end position should be in area2, also test a little bit back
 			//because the predicted jump could have rushed through the area
-			VectorMA(move.endpos, -64, dir, teststart);
+			VectorMA(move.endpos, -128, dir, teststart);
 			teststart[2] += 1;
 			numareas = AAS_TraceAreas(move.endpos, teststart, areas, NULL, sizeof(areas) / sizeof(int));
 			for (j = 0; j < numareas; j++)
@@ -2360,6 +2387,8 @@ int AAS_Reachability_Jump(int area1num, int area2num)
 		//
 		if ((traveltype & TRAVELTYPE_MASK) == TRAVEL_JUMP)
 			reach_jump++;
+		else if ((traveltype & TRAVELTYPE_MASK) == TRAVEL_STRAFEJUMP)
+			reach_strafejump++;
 		else
 			reach_walkoffledge++;
 	} //end if
