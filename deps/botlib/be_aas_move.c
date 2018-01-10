@@ -77,22 +77,29 @@ void AAS_InitSettings(void)
 	aassettings.phys_gravitydirection[0]	= 0;
 	aassettings.phys_gravitydirection[1]	= 0;
 	aassettings.phys_gravitydirection[2]	= -1;
-	aassettings.phys_friction				= LibVarValue("phys_friction", "6");
+	// Wsw: s/6/8
+	aassettings.phys_friction				= LibVarValue("phys_friction", "8");
 	aassettings.phys_stopspeed				= LibVarValue("phys_stopspeed", "100");
-	aassettings.phys_gravity				= LibVarValue("phys_gravity", "800");
+	// Wsw: s/800/850
+	aassettings.phys_gravity				= LibVarValue("phys_gravity", "850");
 	aassettings.phys_waterfriction			= LibVarValue("phys_waterfriction", "1");
 	aassettings.phys_watergravity			= LibVarValue("phys_watergravity", "400");
 	aassettings.phys_maxvelocity			= LibVarValue("phys_maxvelocity", "320");
 	aassettings.phys_maxwalkvelocity		= LibVarValue("phys_maxwalkvelocity", "320");
 	aassettings.phys_maxcrouchvelocity		= LibVarValue("phys_maxcrouchvelocity", "100");
 	aassettings.phys_maxswimvelocity		= LibVarValue("phys_maxswimvelocity", "150");
-	aassettings.phys_walkaccelerate			= LibVarValue("phys_walkaccelerate", "10");
+	// Wsw: s/10/12
+	aassettings.phys_walkaccelerate			= LibVarValue("phys_walkaccelerate", "12");
 	aassettings.phys_airaccelerate			= LibVarValue("phys_airaccelerate", "1");
 	aassettings.phys_swimaccelerate			= LibVarValue("phys_swimaccelerate", "4");
-	aassettings.phys_maxstep				= LibVarValue("phys_maxstep", "19");
+	// Wsw: s/19/18
+	aassettings.phys_maxstep				= LibVarValue("phys_maxstep", "18");
 	aassettings.phys_maxsteepness			= LibVarValue("phys_maxsteepness", "0.7");
 	aassettings.phys_maxwaterjump			= LibVarValue("phys_maxwaterjump", "18");
-	aassettings.phys_maxbarrier				= LibVarValue("phys_maxbarrier", "33");
+	// Wsw: assumes walljumping at peak of jump (bots can do this)
+	aassettings.phys_maxbarrier				= LibVarValue("phys_maxbarrier", "72");
+	// Wsw: We did not modify it to stay conservative in reachability tests
+	// but the actual value used in the game engine is larger
 	aassettings.phys_jumpvel				= LibVarValue("phys_jumpvel", "270");
 	aassettings.phys_falldelta5				= LibVarValue("phys_falldelta5", "40");
 	aassettings.phys_falldelta10			= LibVarValue("phys_falldelta10", "60");
