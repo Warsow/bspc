@@ -724,7 +724,7 @@ tmp_node_t *AAS_CreateArea(node_t *node)
 	tmparea->presencetype = ~node->expansionbboxes & cfg.allpresencetypes;
 	//
 	tmparea->contents = 0;
-	if (node->contents & CONTENTS_CLUSTERPORTAL) tmparea->contents |= AREACONTENTS_CLUSTERPORTAL;
+	//if (node->contents & CONTENTS_CLUSTERPORTAL) tmparea->contents |= AREACONTENTS_CLUSTERPORTAL;
 	if (node->contents & CONTENTS_MOVER) tmparea->contents |= AREACONTENTS_MOVER;
 	if (node->contents & CONTENTS_TELEPORTER) tmparea->contents |= AREACONTENTS_TELEPORTER;
 	if (node->contents & CONTENTS_JUMPPAD) tmparea->contents |= AREACONTENTS_JUMPPAD;

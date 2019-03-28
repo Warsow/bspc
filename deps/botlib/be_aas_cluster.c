@@ -904,9 +904,9 @@ int AAS_CheckAreaForPossiblePortals(int areanum)
 	//set the cluster portal contents
 	for (i = 0; i < numareas; i++)
 	{
-		aasworld.areasettings[areanums[i]].contents |= AREACONTENTS_CLUSTERPORTAL;
+		//aasworld.areasettings[areanums[i]].contents |= AREACONTENTS_CLUSTERPORTAL;
 		//this area can be used as a route portal
-		aasworld.areasettings[areanums[i]].contents |= AREACONTENTS_ROUTEPORTAL;
+		//aasworld.areasettings[areanums[i]].contents |= AREACONTENTS_ROUTEPORTAL;
 		Log_Write("possible portal: %d\r\n", areanums[i]);
 	} //end for
 	//
@@ -1446,7 +1446,7 @@ void AAS_SetViewPortalsAsClusterPortals(void)
 	{
 		if (aasworld.areasettings[i].contents & AREACONTENTS_VIEWPORTAL)
 		{
-			aasworld.areasettings[i].contents |= AREACONTENTS_CLUSTERPORTAL;
+			//aasworld.areasettings[i].contents |= AREACONTENTS_CLUSTERPORTAL;
 		} //end if
 	} //end for
 } //end of the function AAS_SetViewPortalsAsClusterPortals
